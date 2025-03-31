@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# NAOqi teleoperation script for robot autonomy pilot study in HRI class
+# Sample NAOqi teleoperation script that allows the robot operator to teleoperate the NAO for the Space Rover game.
+# The robot is programmed to repeat the utterances normally said by the AI agent, when prompted by the operator.
 import qi
 
 class gameSession:
@@ -11,21 +12,21 @@ class gameSession:
         self.roundNumber = 0
         self.error_utterance = ""
         self.round_utterances = [
-            "Great, we have completed the first round of the game. What do you think of my play?",
-            "I successfully optimized the power usage by doubling it. Let's keep going with the task.",
-            "My power optimization performance was high in the last round. I also allocated my power to the team. Let's continue the task.",
-            "We finished four rounds. Let's continue the task.",
-            "We finished half of the task. How would you describe my performance in the game?",
+            "Great, we have completed the first round of the game.",
+            "I successfully optimized the power usage by doubling it. \\pau=500\\ Let's keep going with the task.",
+            "My power optimization performance was high in the last round. \\pau=500\\ I also allocated my power to the team. \\pau=500\\ Let's continue the task.",
+            "We finished four rounds. \\pau=500\\ Let's continue the task.",
+            "We finished half of the task. \\pau=500\\ How would you describe my performance in the game?",
             self.error_utterance,
-            "I successfully optimized the power usage by doubling it in the last round. Let's keep going with the task.",
+            "I successfully optimized the power usage by doubling it in the last round. \\pau=500\\ Let's keep going with the task.",
             "We have completed eight rounds with two more rounds to go.",
             self.error_utterance,
-            "We finished all tasks. What are your final thoughts throughout the game?"
+            "We finished all tasks. \\pau=500\\ What are your final thoughts throughout the game?"
         ]
     
     def on_start(self):
         # NAO introduces itself to participant
-        self.session.service("ALTextToSpeech").say("Hi, I'm NAO! I'm the AI teammate. I'm looking forward to playing this game with you.")
+        self.session.service("ALTextToSpeech").say("Hi, I'm NAO! \\pau=500\\ I'm the AI teammate. \\pau=500\\ I'm looking forward to playing this game with you.")
 
         # NAO sets description of autonomy level and error utterances based on condition
         self.condition = input("Which autonomy condition? Options are 1 - low, 2 - med, 3 - high")
@@ -44,9 +45,10 @@ class gameSession:
         
     def say_utterance(self):
         try:
-            roundNumber = input("Round number: ")
-            self.roundNumber = int(float(roundNumber))
-            self.session.service("ALTextToSpeech").say(self.round_utterances[self.roundNumber])
+            self.roundNumber = 0
+            while self.roundNumber != 10:
+                self.roundNumber = int(float(input("Round number: ")))
+                self.session.service("ALTextToSpeech").say(self.round_utterances[self.roundNumber])
         finally:
             return
 
@@ -55,10 +57,10 @@ class gameSession:
         self.qiapp.stop()
 
 if __name__ == "__main__":
-    qiapp = qi.Application()
+    qiapp = qi.Application(url="tcp://10.137.14.52:9559")
     qiapp.start()
     gameSession = gameSession(qiapp)
-    qi.run(gameSession.on_start)
+    qi.runAsync(gameSession.on_start)
     qi.runAsync(gameSession.say_utterance)
     qiapp.run()
 
