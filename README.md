@@ -3,24 +3,43 @@ The lab PCs should already have the SDK installed (try "wsl --install"); if ther
 
 ## setting up NAOqi 2.8 SDK on Ubuntu 24.04 WSL instance
 ```wsl —install```
-	set username and password
-	hilab1: gatechhilab1
-	hilab2: gatechhilab2
+
+set username and password
+
+hilab1: gatechhilab1
+
+hilab2: gatechhilab2
+
 ```python3 —version```
+
 ```nano ~/.bashrc```
+
 write ```alias python="python3" ```
-	ctrl+X
-	select Y
+
+ctrl+X
+
+select Y
+
 ```source ~/.bashrc```
+
 ```python —version```
+
 ```sudo apt-get update```
+
 ```sudo apt-get install python3-pip```
+
 ```sudo apt-get install cmake```
+
 ```sudo apt-get install python3-venv```
+
 ```mkdir nao```
+
 ```cd nao```
+
 ```python3 -m venv nao_venv```
+
 ```source nao_venv/bin/activate``` (to exit: ```deactivate```)
+
 ```python3 -m pip install qi```
 
 ## loading Ubuntu 24.04 WSL instance (if WSL instance is already installed)
